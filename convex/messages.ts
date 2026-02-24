@@ -9,7 +9,6 @@ export const list = query({
   handler: async (ctx, args) => {
     let currentUser;
     
-    // Try to get user via auth first
     const identity = await ctx.auth.getUserIdentity();
     if (identity) {
       currentUser = await ctx.db
@@ -18,7 +17,6 @@ export const list = query({
         .first();
     }
     
-    // Fallback: use clerkId from args if auth isn't configured
     if (!currentUser && args.clerkId) {
       const clerkId = args.clerkId; // Type guard
       currentUser = await ctx.db
@@ -158,7 +156,6 @@ export const get = query({
   handler: async (ctx, args) => {
     let currentUser;
     
-    // Try to get user via auth first
     const identity = await ctx.auth.getUserIdentity();
     if (identity) {
       currentUser = await ctx.db
@@ -167,7 +164,6 @@ export const get = query({
         .first();
     }
     
-    // Fallback: use clerkId from args if auth isn't configured
     if (!currentUser && args.clerkId) {
       const clerkId = args.clerkId; // Type guard
       currentUser = await ctx.db
@@ -222,7 +218,6 @@ export const send = mutation({
   handler: async (ctx, args) => {
     let currentUser;
     
-    // Try to get user via auth first
     const identity = await ctx.auth.getUserIdentity();
     if (identity) {
       currentUser = await ctx.db
@@ -231,7 +226,6 @@ export const send = mutation({
         .first();
     }
     
-    // Fallback: use clerkId from args if auth isn't configured
     if (!currentUser && args.clerkId) {
       const clerkId = args.clerkId; // Type guard
       currentUser = await ctx.db
@@ -295,7 +289,6 @@ export const deleteMessage = mutation({
   handler: async (ctx, args) => {
     let currentUser;
     
-    // Try to get user via auth first
     const identity = await ctx.auth.getUserIdentity();
     if (identity) {
       currentUser = await ctx.db
@@ -304,7 +297,6 @@ export const deleteMessage = mutation({
         .first();
     }
     
-    // Fallback: use clerkId from args if auth isn't configured
     if (!currentUser && args.clerkId) {
       const clerkId = args.clerkId; // Type guard
       currentUser = await ctx.db
@@ -341,7 +333,6 @@ export const addReaction = mutation({
   handler: async (ctx, args) => {
     let currentUser;
     
-    // Try to get user via auth first
     const identity = await ctx.auth.getUserIdentity();
     if (identity) {
       currentUser = await ctx.db
@@ -350,7 +341,6 @@ export const addReaction = mutation({
         .first();
     }
     
-    // Fallback: use clerkId from args if auth isn't configured
     if (!currentUser && args.clerkId) {
       const clerkId = args.clerkId; // Type guard
       currentUser = await ctx.db

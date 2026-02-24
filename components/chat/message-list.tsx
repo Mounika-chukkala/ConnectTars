@@ -134,7 +134,6 @@ export function MessageList({
         const count = messages.filter(
           (msg: any) => 
             msg.senderId !== currentUserId && 
-            !msg.isPending && 
             !msg.isDeleted &&
             msg.createdAt > lastReadMessageTime
         ).length;

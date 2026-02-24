@@ -29,12 +29,10 @@ export default function ChatPage() {
   const [showProfileDialog, setShowProfileDialog] = useState(false);
 
   const currentUser = useQuery(api.auth.getCurrentUser);
-  // Fallback: try to get user by clerkId if auth isn't configured
   const userByClerkId = useQuery(
     api.users.getByClerkId,
     user ? { clerkId: user.id } : "skip"
   );
-  // Use currentUser if available and not null, otherwise fall back to userByClerkId
   const effectiveUser = currentUser !== null && currentUser !== undefined ? currentUser : userByClerkId;
   const getOrCreateUser = useMutation(api.auth.getOrCreateUser);
   const updatePresence = useMutation(api.presence.updatePresence);
@@ -48,24 +46,15 @@ export default function ChatPage() {
     }
   }, [isLoaded, user, router]);
 
-  // Create user if they don't exist yet
   useEffect(() => {
     if (!isLoaded || !user) return;
     
-    // effectiveUser can be: undefined (loading), null (not found), or user object
     if (effectiveUser === undefined) {
-      // Still loading, wait
       return;
     }
 
     if (effectiveUser === null && !isCreatingUser) {
-      // User is signed in but doesn't exist in Convex yet - create them
       setIsCreatingUser(true);
-      console.log("Creating user in Convex from chat page...", {
-        clerkId: user.id,
-        name: user.fullName || user.firstName || "User",
-        email: user.emailAddresses[0]?.emailAddress || "",
-      });
       
       getOrCreateUser({
         clerkId: user.id,
@@ -74,9 +63,7 @@ export default function ChatPage() {
         imageUrl: user.imageUrl,
       })
         .then((userId) => {
-          console.log("✅ User created successfully from chat page:", userId);
           setIsCreatingUser(false);
-          // The userByClerkId query should automatically refetch and find the user
         })
         .catch((error) => {
           console.error("Error creating user from chat page:", error);
@@ -86,22 +73,15 @@ export default function ChatPage() {
   }, [isLoaded, user, effectiveUser, getOrCreateUser, isCreatingUser]);
 
   useEffect(() => {
-    // Update presence when tab is visible and every 10 seconds
     if (effectiveUser) {
       const updatePresenceStatus = () => {
-        // Only update if tab is visible
         if (document.visibilityState === "visible") {
           updatePresence({ clerkId: user?.id });
         }
       };
 
-      // Update immediately
       updatePresenceStatus();
-
-      // Update every 10 seconds
       const interval = setInterval(updatePresenceStatus, 10000);
-
-      // Update when tab becomes visible
       document.addEventListener("visibilitychange", updatePresenceStatus);
 
       return () => {
@@ -134,7 +114,6 @@ export default function ChatPage() {
   }
 
   if (!effectiveUser && user) {
-    // User creation might have failed, try redirecting back to home to retry
     return (
       <div className="flex h-screen items-center justify-center">
         <div className="text-center">

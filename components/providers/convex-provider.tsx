@@ -25,17 +25,12 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
       try {
         const token = await getToken({ template: "convex" });
         if (token) {
-          console.log("✅ Convex token fetched successfully");
           convex.setAuth(async () => token);
         } else {
-          console.warn("⚠️ No Convex token returned. This means:");
-          console.warn("1. Clerk JWT template named 'convex' doesn't exist");
-          console.warn("2. Go to Clerk Dashboard → JWT Templates → Create 'convex' template");
-          console.warn("3. Then configure Convex Dashboard → Settings → Auth → Add Clerk issuer");
           convex.clearAuth();
         }
       } catch (error) {
-        console.error("❌ Error fetching Convex token:", error);
+        console.error("Error fetching Convex token:", error);
         convex.clearAuth();
       }
     };

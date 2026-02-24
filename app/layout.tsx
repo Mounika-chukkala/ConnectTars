@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ConvexClientProvider } from "@/components/providers/convex-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
-import { DebugEnv } from "@/components/debug-env";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
@@ -37,7 +36,6 @@ export default function RootLayout({
                 duration: 3000,
               }}
             />
-            <DebugEnv />
           </ThemeProvider>
         </body>
       </html>

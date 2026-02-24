@@ -8,7 +8,6 @@ export const updatePresence = mutation({
   handler: async (ctx, args) => {
     let currentUser;
     
-    // Try to get user via auth first
     const identity = await ctx.auth.getUserIdentity();
     if (identity) {
       currentUser = await ctx.db
@@ -17,7 +16,6 @@ export const updatePresence = mutation({
         .first();
     }
     
-    // Fallback: use clerkId from args if auth isn't configured
     if (!currentUser && args.clerkId) {
       const clerkId = args.clerkId; // Type guard
       currentUser = await ctx.db
@@ -58,7 +56,6 @@ export const getOnlineUsers = query({
   handler: async (ctx, args) => {
     let currentUser;
     
-    // Try to get user via auth first
     const identity = await ctx.auth.getUserIdentity();
     if (identity) {
       currentUser = await ctx.db
@@ -67,7 +64,6 @@ export const getOnlineUsers = query({
         .first();
     }
     
-    // Fallback: use clerkId from args if auth isn't configured
     if (!currentUser && args.clerkId) {
       const clerkId = args.clerkId; // Type guard
       currentUser = await ctx.db
@@ -76,7 +72,6 @@ export const getOnlineUsers = query({
         .first();
     }
 
-    // If no current user, still return online users (for public visibility)
     const onlinePresence = await ctx.db
       .query("presence")
       .filter((q) => q.eq(q.field("isOnline"), true))

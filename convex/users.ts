@@ -21,7 +21,6 @@ export const list = query({
   handler: async (ctx, args) => {
     let currentUser;
     
-    // Try to get user via auth first
     const identity = await ctx.auth.getUserIdentity();
     if (identity) {
       currentUser = await ctx.db
@@ -30,7 +29,6 @@ export const list = query({
         .first();
     }
     
-    // Fallback: use clerkId from args if auth isn't configured
     if (!currentUser && args.clerkId) {
       const clerkId = args.clerkId; // Type guard
       currentUser = await ctx.db
@@ -82,7 +80,6 @@ export const updateName = mutation({
   handler: async (ctx, args) => {
     let currentUser;
     
-    // Try to get user via auth first
     const identity = await ctx.auth.getUserIdentity();
     if (identity) {
       currentUser = await ctx.db
@@ -91,7 +88,6 @@ export const updateName = mutation({
         .first();
     }
     
-    // Fallback: use clerkId from args if auth isn't configured
     if (!currentUser && args.clerkId) {
       const clerkId = args.clerkId;
       currentUser = await ctx.db

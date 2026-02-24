@@ -32,25 +32,6 @@ export function MessageInput({ conversationId, replyingTo, onClearReply }: Messa
   const audioChunksRef = useRef<Blob[]>([]);
   const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const [isOnline, setIsOnline] = useState(true);
-  
-  // Check online status
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setIsOnline(navigator.onLine);
-      
-      const handleOnline = () => setIsOnline(true);
-      const handleOffline = () => setIsOnline(false);
-      
-      window.addEventListener("online", handleOnline);
-      window.addEventListener("offline", handleOffline);
-      
-      return () => {
-        window.removeEventListener("online", handleOnline);
-        window.removeEventListener("offline", handleOffline);
-      };
-    }
-  }, []);
   
   // Get the message being replied to
   const repliedMessage = useQuery(
@@ -61,19 +42,9 @@ export function MessageInput({ conversationId, replyingTo, onClearReply }: Messa
   const handleSend = async () => {
     if ((!content.trim() && !selectedFile) || isSending) return;
 
-    // Check if offline
-    if (!isOnline) {
-      toast.error("You are offline. Please check your connection and try again.", {
-        icon: "⚠️",
-        duration: 4000,
-      });
-      return;
-    }
-
     const messageContent = content.trim();
     setContent("");
 
-    // If online, try to send
     setIsSending(true);
     try {
       let fileId: Id<"_storage"> | undefined;
@@ -111,8 +82,6 @@ export function MessageInput({ conversationId, replyingTo, onClearReply }: Messa
         const { storageId } = await result.json();
         fileId = storageId;
         // Get file URL using the query
-        // Note: We'll get the URL on the client side when displaying
-        // For now, we'll store the fileId and retrieve the URL when needed
       }
 
       await sendMessage({

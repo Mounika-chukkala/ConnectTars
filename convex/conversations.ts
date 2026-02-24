@@ -8,7 +8,6 @@ export const list = query({
   handler: async (ctx, args) => {
     let currentUser;
     
-    // Try to get user via auth first
     const identity = await ctx.auth.getUserIdentity();
     if (identity) {
       currentUser = await ctx.db
@@ -17,7 +16,6 @@ export const list = query({
         .first();
     }
     
-    // Fallback: use clerkId from args if auth isn't configured
     if (!currentUser && args.clerkId) {
       const clerkId = args.clerkId; // Type guard
       currentUser = await ctx.db
@@ -31,7 +29,6 @@ export const list = query({
     }
 
     // Get all conversations and filter by participant
-    // Note: Convex doesn't support array contains queries directly, so we query all and filter
     const allConversations = await ctx.db.query("conversations").collect();
 
     // Filter conversations where user is a participant
@@ -104,7 +101,6 @@ export const get = query({
   handler: async (ctx, args) => {
     let currentUser;
     
-    // Try to get user via auth first
     const identity = await ctx.auth.getUserIdentity();
     if (identity) {
       currentUser = await ctx.db
@@ -113,7 +109,6 @@ export const get = query({
         .first();
     }
     
-    // Fallback: use clerkId from args if auth isn't configured
     if (!currentUser && args.clerkId) {
       const clerkId = args.clerkId; // Type guard
       currentUser = await ctx.db
@@ -147,7 +142,6 @@ export const getOrCreate = mutation({
   handler: async (ctx, args) => {
     let currentUser;
     
-    // Try to get user via auth first
     const identity = await ctx.auth.getUserIdentity();
     if (identity) {
       currentUser = await ctx.db
@@ -156,7 +150,6 @@ export const getOrCreate = mutation({
         .first();
     }
     
-    // Fallback: use clerkId from args if auth isn't configured
     if (!currentUser && args.clerkId) {
       const clerkId = args.clerkId; // Type guard
       currentUser = await ctx.db
@@ -203,7 +196,6 @@ export const createGroup = mutation({
   handler: async (ctx, args) => {
     let currentUser;
     
-    // Try to get user via auth first
     const identity = await ctx.auth.getUserIdentity();
     if (identity) {
       currentUser = await ctx.db
@@ -212,7 +204,6 @@ export const createGroup = mutation({
         .first();
     }
     
-    // Fallback: use clerkId from args if auth isn't configured
     if (!currentUser && args.clerkId) {
       const clerkId = args.clerkId; // Type guard
       currentUser = await ctx.db
@@ -244,7 +235,6 @@ export const markAsRead = mutation({
   handler: async (ctx, args) => {
     let currentUser;
     
-    // Try to get user via auth first
     const identity = await ctx.auth.getUserIdentity();
     if (identity) {
       currentUser = await ctx.db
@@ -253,7 +243,6 @@ export const markAsRead = mutation({
         .first();
     }
     
-    // Fallback: use clerkId from args if auth isn't configured
     if (!currentUser && args.clerkId) {
       const clerkId = args.clerkId; // Type guard
       currentUser = await ctx.db

@@ -104,7 +104,7 @@ export default function ChatPage() {
     return (
       <div className="flex h-screen items-center justify-center">
         <div className="text-center">
-          <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+          <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-muted-foreground/20 border-t-muted-foreground"></div>
           <p className="text-muted-foreground">
             {isCreatingUser ? "Creating your account..." : "Loading..."}
           </p>
@@ -117,7 +117,7 @@ export default function ChatPage() {
     return (
       <div className="flex h-screen items-center justify-center">
         <div className="text-center">
-          <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+          <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-muted-foreground/20 border-t-muted-foreground"></div>
           <p className="text-muted-foreground">Setting up your account...</p>
         </div>
       </div>
@@ -290,7 +290,7 @@ export default function ChatPage() {
             }}
           />
         ) : (
-          <div className="flex h-full items-center justify-center bg-gradient-to-br from-background via-background to-muted/20">
+          <div className="flex h-full items-center justify-center bg-gradient-to-b from-card via-card to-card/95 dark:from-[#111B21] dark:via-[#111B21] dark:to-[#0d1519]">
             <div className="text-center p-8">
               <div className="mx-auto mb-6 h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
                 <MessageSquare className="h-8 w-8 text-primary" />

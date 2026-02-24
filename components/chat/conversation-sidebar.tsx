@@ -142,7 +142,7 @@ function ConversationItem({
       onClick={onClick}
       className={`w-full p-3.5 text-left transition-all duration-200 ${
         isSelected 
-          ? "bg-primary/10 dark:bg-primary/20 border-l-4 border-primary shadow-sm" 
+          ? "bg-muted/50 dark:bg-muted/30 border-l-4 border-foreground/30 dark:border-foreground/50 shadow-sm" 
           : "hover:bg-muted/50 dark:hover:bg-muted/30 border-l-4 border-transparent"
       }`}
     >
@@ -152,7 +152,7 @@ function ConversationItem({
             src={displayImage}
             alt={displayName}
             fallback={displayName.charAt(0).toUpperCase()}
-            className="h-12 w-12 ring-2 ring-primary/10 dark:ring-primary/20 transition-all"
+            className="h-12 w-12 ring-2 ring-muted-foreground/10 dark:ring-muted-foreground/20 transition-all"
           />
           {!conversation.isGroup && isOtherUserOnline && (
             <div className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-background bg-green-500 shadow-lg" />
@@ -162,7 +162,7 @@ function ConversationItem({
           <div className="flex items-center justify-between gap-2 mb-1">
             <p className="truncate font-semibold text-foreground">{displayName}</p>
             {conversation.unreadCount > 0 && (
-              <Badge variant="default" className="shrink-0 bg-primary text-primary-foreground text-xs font-semibold px-2 py-0.5 min-w-[20px] h-5 flex items-center justify-center">
+              <Badge variant="default" className="shrink-0 bg-foreground text-background text-xs font-semibold px-2 py-0.5 min-w-[20px] h-5 flex items-center justify-center">
                 {conversation.unreadCount > 99 ? '99+' : conversation.unreadCount}
               </Badge>
             )}
@@ -170,7 +170,7 @@ function ConversationItem({
           <div className="flex items-center justify-between gap-2">
             <p className="line-clamp-1 flex-1 text-sm text-muted-foreground">
               {isTyping ? (
-                <span className="italic text-primary font-medium animate-pulse">typing...</span>
+                <span className="italic text-foreground font-medium animate-pulse">typing...</span>
               ) : (
                 preview
               )}

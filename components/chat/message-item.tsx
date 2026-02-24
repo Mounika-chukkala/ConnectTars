@@ -70,9 +70,9 @@ export function MessageItem({ message, currentUserId, onReply, isGroup = false, 
     }
     
     // Individual chats only:
-    // Priority 1: Check if message has been read (double blue ticks)
+    // Priority 1: Check if message has been read (double ticks)
     if (message.isRead === true) {
-      return 'read'; // Double blue ticks
+      return 'read';
     }
     
     // Priority 2: Check if other user is online (double grey ticks - delivered)
@@ -190,15 +190,15 @@ export function MessageItem({ message, currentUserId, onReply, isGroup = false, 
             className={`rounded-2xl px-4 py-2.5 min-w-0 max-w-full shadow-sm transition-all ${
               isOwnMessage
                 ? "bg-gradient-to-br from-slate-100 to-slate-200 dark:from-gray-500 dark:to-gray-600 text-gray-900 dark:text-white"
-                : "bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 text-white"
+                : "bg-gradient-to-br from-muted to-muted/80 dark:from-[#2A3942] dark:to-[#202C33] text-foreground dark:text-white"
             }`}
           >
             {isDeleted ? (
               <div className="space-y-1">
-                <p className={`text-xs font-medium ${isOwnMessage ? 'text-gray-700 dark:text-white/80' : 'text-white/80'}`}>
+                <p className={`text-xs font-medium ${isOwnMessage ? 'text-gray-700 dark:text-white/80' : 'text-foreground/90 dark:text-white/80'}`}>
                   {isOwnMessage ? "You" : senderName} deleted this message
                 </p>
-                <p className={`italic text-sm ${isOwnMessage ? 'text-gray-600 dark:text-white/70' : 'text-white/70'}`}>
+                <p className={`italic text-sm ${isOwnMessage ? 'text-gray-600 dark:text-white/70' : 'text-foreground/80 dark:text-white/70'}`}>
                   This message was deleted
                 </p>
               </div>
@@ -207,7 +207,7 @@ export function MessageItem({ message, currentUserId, onReply, isGroup = false, 
                 {/* Reply preview */}
                 {message.repliedMessage && !message.repliedMessage.isDeleted && (
                   <div className={`mb-1.5 border-l-2 pl-2 text-xs ${
-                    isOwnMessage ? 'border-gray-400 text-gray-700 dark:border-white/30 dark:text-white/70' : 'border-white/30 text-white/70'
+                    isOwnMessage ? 'border-gray-400 text-gray-700 dark:border-white/30 dark:text-white/70' : 'border-foreground/30 dark:border-white/30 text-foreground/80 dark:text-white/70'
                   }`}>
                     <p className="font-medium">{message.repliedMessage.senderName || 'Unknown'}</p>
                     <p className="truncate">{message.repliedMessage.content || 'This message was deleted'}</p>
@@ -270,17 +270,17 @@ export function MessageItem({ message, currentUserId, onReply, isGroup = false, 
                 )}
                 {/* Text content with timestamp and ticks inline */}
                 {message.content && (
-                  <div className="mt-">
+                  <div className="mt-1">
                     <p className="whitespace-pre-wrap break-words overflow-wrap-anywhere leading-relaxed">
                       {message.content}
-                      <span className={`inline-flex  justify-end  right-0 bottom-0 items-end gap-1 ml-2 text-xs opacity-70 ${isOwnMessage ? 'text-gray-700 dark:text-white/80' : 'text-white/80'}`}>
+                      <span className={`inline-flex  justify-end  right-0 bottom-0 items-end gap-1 ml-2 text-xs opacity-70 ${isOwnMessage ? 'text-gray-700 dark:text-white/80' : 'text-foreground/80 dark:text-white/80'}`}>
                         {formatMessageTime(message.createdAt)}
                         {isOwnMessage && (
-                          <span className={`inline-flex items-center ${tickStatus === 'read' ? 'text-blue-500 dark:text-blue-400' : 'text-blue-400 dark:text-blue-300'}`}>
+                          <span className={`inline-flex items-center ${tickStatus === 'read' ? 'text-blue-400 dark:text-blue-400' : 'text-blue-400/70 dark:text-blue-400/70'}`}>
                             {tickStatus === 'sent' ? (
                               <Check className="h-3 w-3" />
                             ) : (
-                              <CheckCheck className={`h-3.5 w-3.5 ${tickStatus === 'read' ? 'text-blue-500 dark:text-blue-400' : 'text-blue-400 dark:text-blue-300'}`} />
+                              <CheckCheck className={`h-3.5 w-3.5 ${tickStatus === 'read' ? 'text-blue-400 dark:text-blue-400' : 'text-blue-400/70 dark:text-blue-400/70'}`} />
                             )}
                           </span>
                         )}
@@ -290,14 +290,14 @@ export function MessageItem({ message, currentUserId, onReply, isGroup = false, 
                 )}
                 {/* Timestamp and status for messages without text content */}
                 {!message.content && (
-                  <div className={`flex items-end text-righ justify-end gap-1 text-xs opacity-70 mt-1 ${isOwnMessage ? 'text-gray-700  dark:text-white/80' : 'text-white/80'}`}>
+                  <div className={`flex items-end text-righ justify-end gap-1 text-xs opacity-70 mt-1 ${isOwnMessage ? 'text-gray-700  dark:text-white/80' : 'text-foreground/80 dark:text-white/80'}`}>
                     {formatMessageTime(message.createdAt)}
                     {isOwnMessage && (
-                      <span className={`ml-1 inline-flex items-center ${tickStatus === 'read' ? 'text-blue-500 dark:text-blue-400' : 'text-blue-400 dark:text-blue-300'}`}>
+                      <span className={`ml-1 inline-flex items-center ${tickStatus === 'read' ? 'text-blue-400 dark:text-blue-400' : 'text-blue-400/70 dark:text-blue-400/70'}`}>
                         {tickStatus === 'sent' ? (
                           <Check className="h-3 w-3" />
                         ) : (
-                          <CheckCheck className={`h-3.5 w-3.5 ${tickStatus === 'read' ? 'text-blue-500 dark:text-blue-400' : 'text-blue-400 dark:text-blue-300'}`} />
+                          <CheckCheck className={`h-3.5 w-3.5 ${tickStatus === 'read' ? 'text-blue-400 dark:text-blue-400' : 'text-blue-400/70 dark:text-blue-400/70'}`} />
                         )}
                       </span>
                     )}

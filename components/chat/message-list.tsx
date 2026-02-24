@@ -176,7 +176,7 @@ export function MessageList({
     return (
       <div className="flex flex-1 items-center justify-center">
         <div className="text-center">
-          <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+          <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-muted-foreground/20 border-t-muted-foreground"></div>
           <p className="text-muted-foreground">Loading messages...</p>
         </div>
       </div>
@@ -187,7 +187,7 @@ export function MessageList({
     <div className="relative flex flex-1 flex-col overflow-hidden">
       <div
         ref={containerRef}
-        className="flex-1 overflow-y-auto overflow-x-hidden p-4 scrollbar-thin bg-gradient-to-b from-background via-background to-background/95"
+        className="flex-1 overflow-y-auto overflow-x-hidden p-4 scrollbar-thin bg-gradient-to-b from-card via-card to-card/95 dark:from-[#111B21] dark:via-[#111B21] dark:to-[#0d1519]"
         onScroll={checkScrollPosition}
       >
         {messages.length === 0 ? (

@@ -73,6 +73,9 @@ export const list = query({
           .withIndex("by_message", (q) => q.eq("messageId", message._id))
           .collect();
 
+        // Get sender info for senderName
+        const sender = await ctx.db.get(message.senderId);
+
         // Group reactions by emoji
         // Use a plain object (not a Convex value) to avoid field name validation issues
         const reactionGroups: { [key: string]: number } = {};
@@ -105,6 +108,7 @@ export const list = query({
           _creationTime: message._creationTime,
           conversationId: message.conversationId,
           senderId: message.senderId,
+          senderName: sender?.name || "Unknown",
           content: message.content,
           messageType: (message.messageType || "text") as "text" | "image" | "video" | "audio",
           fileId: message.fileId,

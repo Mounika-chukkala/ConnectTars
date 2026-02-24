@@ -248,18 +248,18 @@ export function MessageInput({ conversationId, replyingTo, onClearReply }: Messa
   }, [conversationId, setTyping, user, isRecording]);
 
   return (
-    <div className="border-t bg-card">
+    <div className="border-t bg-gradient-to-t from-card via-card to-card/95 dark:from-[#0d1519] dark:via-[#111B21] dark:to-[#111B21] backdrop-blur-sm shadow-lg">
       {replyingTo && repliedMessage && (
-        <div className="flex items-center justify-between border-b bg-muted/50 px-4 py-2">
-          <div className="flex-1">
-            <p className="text-xs font-medium text-muted-foreground">Replying to {repliedMessage.senderName}</p>
-            <p className="text-sm truncate">{repliedMessage.content}</p>
+        <div className="flex items-center justify-between border-b border-border/50 bg-primary/5 dark:bg-primary/10 px-4 py-2.5">
+          <div className="flex-1 min-w-0">
+            <p className="text-xs font-semibold text-primary mb-0.5">Replying to {repliedMessage.senderName}</p>
+            <p className="text-sm truncate text-muted-foreground">{repliedMessage.content}</p>
           </div>
           {onClearReply && (
             <Button
               variant="ghost"
               size="icon"
-              className="h-6 w-6"
+              className="h-7 w-7 shrink-0 hover:bg-primary/10 transition-colors"
               onClick={onClearReply}
             >
               <X className="h-4 w-4" />
@@ -268,26 +268,26 @@ export function MessageInput({ conversationId, replyingTo, onClearReply }: Messa
         </div>
       )}
       {selectedFile && (
-        <div className="flex items-center justify-between border-b bg-muted/50 px-4 py-2">
-          <div className="flex items-center gap-2">
-            {selectedFile.type.startsWith("image/") && <Image className="h-4 w-4" />}
-            {selectedFile.type.startsWith("video/") && <Video className="h-4 w-4" />}
-            {selectedFile.type.startsWith("audio/") && <Mic className="h-4 w-4" />}
-            {!selectedFile.type.startsWith("image/") && !selectedFile.type.startsWith("video/") && !selectedFile.type.startsWith("audio/") && <FileText className="h-4 w-4" />}
-            <span className="text-sm truncate">{selectedFile.name}</span>
+        <div className="flex items-center justify-between border-b border-border/50 bg-primary/5 dark:bg-primary/10 px-4 py-2.5">
+          <div className="flex items-center gap-2.5 min-w-0 flex-1">
+            {selectedFile.type.startsWith("image/") && <Image className="h-4 w-4 text-primary shrink-0" />}
+            {selectedFile.type.startsWith("video/") && <Video className="h-4 w-4 text-primary shrink-0" />}
+            {selectedFile.type.startsWith("audio/") && <Mic className="h-4 w-4 text-primary shrink-0" />}
+            {!selectedFile.type.startsWith("image/") && !selectedFile.type.startsWith("video/") && !selectedFile.type.startsWith("audio/") && <FileText className="h-4 w-4 text-primary shrink-0" />}
+            <span className="text-sm truncate font-medium">{selectedFile.name}</span>
             {!selectedFile.type.startsWith("audio/") && selectedFile.size && (
-              <span className="text-xs text-muted-foreground">
+              <span className="text-xs text-muted-foreground shrink-0">
                 ({(selectedFile.size / 1024).toFixed(1)} KB)
               </span>
             )}
             {selectedFile.type.startsWith("audio/") && recordingTime > 0 && (
-              <span className="text-xs text-muted-foreground">({formatTime(recordingTime)})</span>
+              <span className="text-xs text-muted-foreground shrink-0">({formatTime(recordingTime)})</span>
             )}
           </div>
           <Button
             variant="ghost"
             size="icon"
-            className="h-6 w-6"
+            className="h-7 w-7 shrink-0 hover:bg-primary/10 transition-colors"
             onClick={() => setSelectedFile(null)}
           >
             <X className="h-4 w-4" />
@@ -309,6 +309,7 @@ export function MessageInput({ conversationId, replyingTo, onClearReply }: Messa
             onClick={() => fileInputRef.current?.click()}
             disabled={isSending || isRecording}
             title="Attach file"
+            className="h-10 w-10 hover:bg-primary/10 transition-colors"
           >
             <Paperclip className="h-4 w-4" />
           </Button>
@@ -317,13 +318,17 @@ export function MessageInput({ conversationId, replyingTo, onClearReply }: Messa
             size="icon"
             onClick={isRecording ? stopRecording : startRecording}
             disabled={isSending || !!selectedFile}
-            className={isRecording ? "text-destructive" : ""}
+            className={`h-10 w-10 transition-colors ${
+              isRecording 
+                ? "text-destructive hover:bg-destructive/10 animate-pulse" 
+                : "hover:bg-primary/10"
+            }`}
             title={isRecording ? "Stop recording" : "Record voice"}
           >
             <Mic className="h-4 w-4" />
           </Button>
           {isRecording && (
-            <div className="flex items-center px-2 text-sm text-destructive">
+            <div className="flex items-center px-3 py-1.5 rounded-lg bg-destructive/10 text-destructive text-sm font-medium">
               <div className="h-2 w-2 rounded-full bg-destructive animate-pulse mr-2" />
               {formatTime(recordingTime)}
             </div>
@@ -336,12 +341,13 @@ export function MessageInput({ conversationId, replyingTo, onClearReply }: Messa
           onChange={handleChange}
           onKeyPress={handleKeyPress}
           disabled={isSending || isRecording}
-          className="flex-1"
+          className="flex-1 h-10 rounded-xl border-border/50 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
         />
         <Button
           onClick={handleSend}
           disabled={(!content.trim() && !selectedFile) || isSending || isRecording}
           size="icon"
+          className="h-10 w-10 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Send className="h-4 w-4" />
         </Button>

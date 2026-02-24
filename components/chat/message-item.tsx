@@ -126,7 +126,15 @@ export function MessageItem({ message, currentUserId, onReply, isGroup = false, 
     setIsDragging(false);
   };
 
-  if (!sender) {
+  // Determine if we should show sender name and avatar
+  // ONLY show in group chats, NEVER in individual chats (even for deleted messages)
+  // For deleted messages in individual chats, name is shown inside the bubble only
+  const shouldShowSenderInfo = isGroup && !isDeleted;
+  const senderName = sender?.name || message.senderName || "Unknown";
+
+  // For deleted messages, we can show them even if sender hasn't loaded yet (we have senderName from backend)
+  // For regular messages, we need sender to be loaded
+  if (!sender && !isDeleted && !message.senderName) {
     return null;
   }
 
@@ -136,22 +144,24 @@ export function MessageItem({ message, currentUserId, onReply, isGroup = false, 
         isOwnMessage ? "flex-row-reverse" : "flex-row"
       }`}
     >
-      {!isOwnMessage && sender && !isDeleted && (
+      {/* Show avatar ONLY in group chats for regular messages, NEVER in individual chats */}
+      {!isOwnMessage && sender && isGroup && (
         <Avatar
           src={sender.imageUrl}
-          alt={sender.name}
-          fallback={sender.name.charAt(0).toUpperCase()}
+          alt={senderName}
+          fallback={senderName.charAt(0).toUpperCase()}
           className="h-7 w-7 shrink-0 mt-1"
         />
       )}
       <div
-        className={`relative flex flex-col gap-0.5 max-w-[400px] overflow-visible ${
+        className={`relative flex flex-col gap-0.5 max-w-[75%] sm:max-w-[400px] overflow-visible ${
           isOwnMessage ? "items-end" : "items-start"
         }`}
       >
-        {!isOwnMessage && sender && !isDeleted && (
+        {/* Only show sender name above message in group chats, NEVER in individual chats */}
+        {isGroup  && (
           <p className="text-xs font-medium text-muted-foreground px-1">
-            {sender.name}
+            {isOwnMessage ? "You" : senderName}
           </p>
         )}
         {/* Reaction picker on click - absolute positioned below message, overlapping */}
@@ -177,22 +187,27 @@ export function MessageItem({ message, currentUserId, onReply, isGroup = false, 
           }}
         >
           <div
-            className={`rounded-lg px-3 py-2.5 min-w-0 ${
+            className={`rounded-2xl px-4 py-2.5 min-w-0 max-w-full shadow-sm transition-all ${
               isOwnMessage
-                ? "bg-primary/70 dark:bg-primary text-primary-foreground"
-                : "bg-muted"
+                ? "bg-gradient-to-br from-slate-100 to-slate-200 dark:from-gray-500 dark:to-gray-600 text-gray-900 dark:text-white"
+                : "bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 text-white"
             }`}
           >
             {isDeleted ? (
-              <p className="italic text-muted-foreground">
-                This message was deleted
-              </p>
+              <div className="space-y-1">
+                <p className={`text-xs font-medium ${isOwnMessage ? 'text-gray-700 dark:text-white/80' : 'text-white/80'}`}>
+                  {isOwnMessage ? "You" : senderName} deleted this message
+                </p>
+                <p className={`italic text-sm ${isOwnMessage ? 'text-gray-600 dark:text-white/70' : 'text-white/70'}`}>
+                  This message was deleted
+                </p>
+              </div>
             ) : (
               <>
                 {/* Reply preview */}
                 {message.repliedMessage && !message.repliedMessage.isDeleted && (
                   <div className={`mb-1.5 border-l-2 pl-2 text-xs ${
-                    isOwnMessage ? 'border-primary-foreground/30 text-primary-foreground/70' : 'border-muted-foreground/30 text-muted-foreground'
+                    isOwnMessage ? 'border-gray-400 text-gray-700 dark:border-white/30 dark:text-white/70' : 'border-white/30 text-white/70'
                   }`}>
                     <p className="font-medium">{message.repliedMessage.senderName || 'Unknown'}</p>
                     <p className="truncate">{message.repliedMessage.content || 'This message was deleted'}</p>
@@ -253,25 +268,41 @@ export function MessageItem({ message, currentUserId, onReply, isGroup = false, 
                     </a>
                   </div>
                 )}
-                {/* Text content */}
+                {/* Text content with timestamp and ticks inline */}
                 {message.content && (
-                  <span className="whitespace-pre-wrap break-words overflow-wrap-anywhere">
-                {message.content}
-                  </span>
+                  <div className="mt-">
+                    <p className="whitespace-pre-wrap break-words overflow-wrap-anywhere leading-relaxed">
+                      {message.content}
+                      <span className={`inline-flex  justify-end  right-0 bottom-0 items-end gap-1 ml-2 text-xs opacity-70 ${isOwnMessage ? 'text-gray-700 dark:text-white/80' : 'text-white/80'}`}>
+                        {formatMessageTime(message.createdAt)}
+                        {isOwnMessage && (
+                          <span className={`inline-flex items-center ${tickStatus === 'read' ? 'text-blue-500 dark:text-blue-400' : 'text-blue-400 dark:text-blue-300'}`}>
+                            {tickStatus === 'sent' ? (
+                              <Check className="h-3 w-3" />
+                            ) : (
+                              <CheckCheck className={`h-3.5 w-3.5 ${tickStatus === 'read' ? 'text-blue-500 dark:text-blue-400' : 'text-blue-400 dark:text-blue-300'}`} />
+                            )}
+                          </span>
+                        )}
+                      </span>
+                    </p>
+                  </div>
                 )}
-                {/* Timestamp and status */}
-                <div className={`flex items-end justify-end gap-1 text-xs opacity-70 ${isOwnMessage ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>
-                  {formatMessageTime(message.createdAt)}
-                  {isOwnMessage && (
-                    <span className={`ml-1 inline-flex items-center ${tickStatus === 'read' ? 'text-blue-400 dark:text-blue-400' : 'text-white dark:text-gray-400'}`}>
-                      {tickStatus === 'sent' ? (
-                        <Check className="h-3 w-3" />
-                      ) : (
-                        <CheckCheck className={`h-3.5 w-3.5 ${tickStatus === 'read' ? 'text-blue-400 dark:text-blue-400' : 'text-white dark:text-gray-400'}`} />
-                      )}
-                    </span>
-                  )}
-                </div>
+                {/* Timestamp and status for messages without text content */}
+                {!message.content && (
+                  <div className={`flex items-end text-righ justify-end gap-1 text-xs opacity-70 mt-1 ${isOwnMessage ? 'text-gray-700  dark:text-white/80' : 'text-white/80'}`}>
+                    {formatMessageTime(message.createdAt)}
+                    {isOwnMessage && (
+                      <span className={`ml-1 inline-flex items-center ${tickStatus === 'read' ? 'text-blue-500 dark:text-blue-400' : 'text-blue-400 dark:text-blue-300'}`}>
+                        {tickStatus === 'sent' ? (
+                          <Check className="h-3 w-3" />
+                        ) : (
+                          <CheckCheck className={`h-3.5 w-3.5 ${tickStatus === 'read' ? 'text-blue-500 dark:text-blue-400' : 'text-blue-400 dark:text-blue-300'}`} />
+                        )}
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
               </>
             )}

@@ -101,9 +101,14 @@ export function ChatArea({
   return (
     <div className="flex h-full flex-col">
       {/* Header */}
-      <div className="flex items-center gap-3 border-b dark:bg-[#202C33] bg-card p-4">
+      <div className="flex items-center gap-3 border-b bg-gradient-to-r from-card to-card/95 dark:from-[#202C33] dark:to-[#1a2529] backdrop-blur-sm p-4 shadow-sm">
         {isMobile && onBack && (
-          <Button variant="ghost" size="icon" onClick={onBack}>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={onBack}
+            className="hover:bg-primary/10 transition-colors"
+          >
             <ArrowLeft className="h-5 w-5" />
           </Button>
         )}
@@ -112,35 +117,38 @@ export function ChatArea({
             src={displayImage}
             alt={displayName}
             fallback={displayName.charAt(0).toUpperCase()}
-            className="h-10 w-10"
+            className="h-11 w-11 ring-2 ring-primary/20 dark:ring-primary/30 transition-all hover:ring-primary/40"
           />
           {!conversation.isGroup && isOtherUserOnline && (
-            <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-background bg-green-500" />
+            <div className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-background bg-green-500 shadow-lg animate-pulse" />
           )}
         </div>
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <p className="font-semibold">{displayName}</p>
+            <p className="font-semibold text-lg truncate">{displayName}</p>
             {conversation.isGroup && (
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setShowGroupInfo(true)}
                 title="Group info"
-                className="h-6 w-6"
+                className="h-7 w-7 hover:bg-primary/10 transition-colors shrink-0"
               >
                 <Info className="h-4 w-4" />
               </Button>
             )}
           </div>
           {conversation.isGroup ? (
-            <p className="text-sm text-muted-foreground">
-              {conversation.participants.length} members
+            <p className="text-sm text-muted-foreground mt-0.5">
+              {conversation.participants.length} {conversation.participants.length === 1 ? 'member' : 'members'}
             </p>
           ) : (
-            <p className="text-sm text-muted-foreground">
-              {isOtherUserOnline ? "online" : "offline"}
-            </p>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <div className={`h-2 w-2 rounded-full ${isOtherUserOnline ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
+              <p className="text-sm text-muted-foreground">
+                {isOtherUserOnline ? "online" : "offline"}
+              </p>
+            </div>
           )}
         </div>
       </div>

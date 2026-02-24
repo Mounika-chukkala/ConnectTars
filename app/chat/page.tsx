@@ -163,16 +163,16 @@ export default function ChatPage() {
       </div>
 
       {/* Left Navigation Panel */}
-      <div className="flex w-16 flex-col items-center border-r dark:bg-[#202C33] bg-muted/50 py-2 md:w-20">
-        <div className="flex flex-1 flex-col items-center gap-4">
+      <div className="flex w-16 flex-col items-center border-r border-border/50 bg-gradient-to-b from-card via-card to-card/95 dark:from-[#202C33] dark:via-[#1a2529] dark:to-[#1a2529] backdrop-blur-sm py-3 md:w-20">
+        <div className="flex flex-1 flex-col items-center gap-3">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setActiveTab("messages")}
-            className={`h-12 w-12 rounded-lg ${
+            className={`h-12 w-12 rounded-xl transition-all ${
               activeTab === "messages"
-                ? "dark:bg-[#2A3942] bg-primary/10 text-primary dark:text-primary"
-                : "text-muted-foreground dark:hover:bg-[#2A3942] hover:bg-primary/10"
+                ? "bg-primary/10 text-primary shadow-md"
+                : "text-muted-foreground hover:bg-primary/10 hover:text-primary"
             }`}
             title="Messages"
           >
@@ -182,10 +182,10 @@ export default function ChatPage() {
             variant="ghost"
             size="icon"
             onClick={() => setActiveTab("groups")}
-            className={`h-12 w-12 rounded-lg ${
+            className={`h-12 w-12 rounded-xl transition-all ${
               activeTab === "groups"
-                ? "dark:bg-[#2A3942] bg-muted text-primary"
-                : "text-muted-foreground dark:hover:bg-[#2A3942] hover:bg-muted"
+                ? "bg-primary/10 text-primary shadow-md"
+                : "text-muted-foreground hover:bg-primary/10 hover:text-primary"
             }`}
             title="Groups"
           >
@@ -198,14 +198,14 @@ export default function ChatPage() {
           <Button
             variant="ghost"
             size="icon"
-            className="h-12 w-12 rounded-lg text-muted-foreground dark:hover:bg-[#2A3942] hover:bg-muted p-0"
-                title="User menu"
+            className="h-12 w-12 rounded-xl text-muted-foreground hover:bg-primary/10 hover:ring-2 hover:ring-primary/20 transition-all p-0"
+            title="User menu"
           >
             <Avatar
               src={user?.imageUrl}
               alt={user?.fullName || "User"}
               fallback={(user?.fullName || "U").charAt(0).toUpperCase()}
-              className="h-10 w-10"
+              className="h-10 w-10 ring-2 ring-primary/20 dark:ring-primary/30"
             />
           </Button>
             }
@@ -238,17 +238,17 @@ export default function ChatPage() {
       <div
         className={`${
           isMobile && showUserList ? "hidden" : isMobile && selectedConversationId ? "hidden" : "flex"
-        } w-full flex-col border-r bg-[#111B21] dark:bg-[#111B21] bg-card md:flex md:w-80 lg:w-96`}
+        } w-full flex-col border-r border-border/50 bg-gradient-to-b from-card via-card to-card/95 dark:from-[#111B21] dark:via-[#0d1519] dark:to-[#0d1519] md:flex md:w-80 lg:w-96`}
       >
-        <div className="flex items-center justify-between border-b dark:border-[#2A3942] bg-[#202C33] dark:bg-[#202C33] bg-muted/50 p-4">
-          <h1 className="text-lg font-semibold dark:text-white text-foreground">ConnectTars</h1>
+        <div className="flex items-center justify-between border-b border-border/50 bg-gradient-to-r from-card via-card to-card/95 dark:from-[#202C33] dark:via-[#1a2529] dark:to-[#1a2529] backdrop-blur-sm p-4 shadow-sm">
+          <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">ConnectTars</h1>
           <div className="flex items-center gap-2">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setShowNewConversationDialog(true)}
               title="New Conversation"
-              className="text-muted-foreground dark:hover:bg-[#2A3942] hover:bg-muted hover:text-foreground"
+              className="h-9 w-9 text-muted-foreground hover:bg-primary/10 hover:text-primary transition-all rounded-lg"
             >
               <Plus className="h-5 w-5" />
             </Button>
@@ -256,7 +256,7 @@ export default function ChatPage() {
               variant="ghost"
               size="icon"
               onClick={() => setShowUserList(!showUserList)}
-              className="md:hidden text-muted-foreground dark:hover:bg-[#2A3942] hover:bg-muted hover:text-foreground"
+              className="md:hidden h-9 w-9 text-muted-foreground hover:bg-primary/10 hover:text-primary transition-all rounded-lg"
             >
               <Users className="h-5 w-5" />
             </Button>
@@ -311,11 +311,13 @@ export default function ChatPage() {
             }}
           />
         ) : (
-          <div className="flex h-full items-center justify-center">
-            <div className="text-center">
-              <MessageSquare className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
-              <h2 className="mb-2 text-xl font-semibold">Select chat to open</h2>
-              <p className="text-muted-foreground">
+          <div className="flex h-full items-center justify-center bg-gradient-to-br from-background via-background to-muted/20">
+            <div className="text-center p-8">
+              <div className="mx-auto mb-6 h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
+                <MessageSquare className="h-8 w-8 text-primary" />
+              </div>
+              <h2 className="mb-2 text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">Select a chat</h2>
+              <p className="text-muted-foreground max-w-sm mx-auto">
                 Choose a conversation from the sidebar to start chatting
               </p>
             </div>
